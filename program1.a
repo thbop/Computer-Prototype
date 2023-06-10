@@ -1,0 +1,8 @@
+set 0000 1010
+ld 0000 A
+set 0001 0001
+ld 0001 B
+sub A B A
+biz 0111
+jmp 0100
+end

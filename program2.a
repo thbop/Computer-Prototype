@@ -1,0 +1,10 @@
+set 0000 1001
+ld 0000 A
+set 0001 1111
+ld 0001 B
+set 0010 0011
+ld 0010 C
+
+dis A B C
+
+end
