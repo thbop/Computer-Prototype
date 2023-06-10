@@ -3,17 +3,35 @@ from g_memory import GMemory
 class ALU:
     def __init__(self):
         self.last = '0b0'
+        self.bit_size = 4
+
+    def bin2(self, i, bitsize):
+        b = bin(i).replace('0b', '')
+        if bitsize - len(b) > 0:
+            b = '0' * (bitsize - len(b)) + b
+        return b
 
     def add(self, a, b):
-        v = bin(
-            int(a, 2) + int(b, 2)
-        )
+        intsum = int(a, 2) + int(b, 2)
+        if intsum > self.bit_size**2 - 1:
+            v = '1111'
+        else:
+            v = self.bin2(
+                int(a, 2) + int(b, 2),
+                self.bit_size
+            )
+        
         self.last = v
         return v
     def sub(self, a, b):
-        v = bin(
-            int(a, 2) - int(b, 2)
-        )
+        intsub = int(a, 2) + int(b, 2)
+        if intsub < 0:
+            v = '0000'
+        else:
+            v = self.bin2(
+                int(a, 2) - int(b, 2),
+                self.bit_size
+            )
         self.last = v
         return v
 
@@ -22,14 +40,14 @@ class CPU:
         self.c = c
         self.alu = ALU()
 
-        self.program = GMemory(16, 256)
+        self.program = GMemory(16, 4095)
 
         self.reg = GMemory(4, 8)
 
-        self.line = '0b00000000'
+        self.line = '0b000000000000'
     
     def load_program(self, program):
-        file = open(program)
+        file = open('programs/' + program)
 
         for i, line in enumerate(file.read().splitlines(), 0):
             self.program.write(bin(i), line)
@@ -53,6 +71,7 @@ class CPU:
             doTick = True
             # print(ins)
             # print(self.alu.last)
+            # print(self.line)
 
             if ins[0] == '0000': # ld
                 self.reg.write(
@@ -60,7 +79,7 @@ class CPU:
                     self.c.mem.read(ins[1])
                 )
             elif ins[0] == '0001': # set
-                self.c.mem.write(ins[1], ins[2])
+                self.reg.write(ins[1], ins[2])
 
             elif ins[0] == '0010': # wrt
                 self.c.mem.write(ins[1], self.reg.read(ins[2]))
@@ -79,20 +98,20 @@ class CPU:
 
             elif ins[0] == '0101': # jmp
                 doTick = False
-                self.line = ins[1]
+                self.line = ins[1] + ins[2] + ins[3]
             
             elif ins[0] == '0110': # biz
                 if int(self.alu.last, 2) == 0:
                     doTick = False
-                    self.line = ins[1]
+                    self.line = ins[1] + ins[2] + ins[3]
 
             elif ins[0] == '1110': # dis
-                pos = int(self.reg.read(ins[1]), 2) + int(self.reg.read(ins[2]), 2) * 16 # cheating here a ton
+                pos = int(self.reg.read(ins[1]), 2) + int(self.reg.read(ins[2]), 2) * 16 # This is not cheating because in reality I would store the video memory as a "2d array"
                 self.c.vmem.write(
-                    bin(pos), ins[3]
+                    bin(pos), self.reg.read(ins[3])
                 )
 
-            elif ins[0] == '1111': # end
+            if ins[0] == '1111' or self.c.halt: # end
                 doTick = False
                 self.line = '0b00000000'
                 print('Terminated')
@@ -100,6 +119,8 @@ class CPU:
 
             if doTick:
                 self.tick()
+            
+            self.c.update_display()
             
 
 

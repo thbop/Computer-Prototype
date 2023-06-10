@@ -1,5 +1,5 @@
-filename = 'program2'
-file = open(filename + '.a')
+filename = 'program1'
+file = open('programs/' + filename + '.a')
 lines = file.read().splitlines()
 file.close()
 
@@ -27,7 +27,7 @@ for l in lines:
             out += '0000' + args[1] + reg_calc(args[2]) + '0000' + '\n'
         
         elif args[0] == 'set':
-            out += '0001' + args[1] + args[2] + '0000' + '\n'
+            out += '0001' + reg_calc(args[1]) + args[2] + '0000' + '\n'
         
         elif args[0] == 'wrt':
             out += '0010' + args[1] + reg_calc(args[2]) + '0000' + '\n'
@@ -41,10 +41,10 @@ for l in lines:
 
         
         elif args[0] == 'jmp':
-            out += '0101' + args[1] + '00000000' + '\n'
+            out += '0101' + args[1] + args[2] + args[3] + '\n'
 
         elif args[0] == 'biz':
-            out += '0110' + args[1] + '00000000' + '\n'
+            out += '0110' + args[1] + args[2] + args[3] + '\n'
 
 
         elif args[0] == 'dis':
@@ -56,6 +56,6 @@ for l in lines:
 
 print(out)
 
-file = open(filename + '.bin', 'w')
+file = open('programs/' + filename + '.bin', 'w')
 file.write(out)
 file.close()
