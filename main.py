@@ -19,7 +19,7 @@ class Computer:
         self.vmem = GMemory(4, 256)
 
         self.cpu = CPU(self)
-        self.cpu.load_program('colors.bin')
+        self.cpu.load_program('test.bin')
 
         self.halt = False
     

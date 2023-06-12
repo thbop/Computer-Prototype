@@ -1,0 +1,5 @@
+set A 0011
+wrt 0000 0000 A
+set A 0110
+wrt 0000 0001 A
+end

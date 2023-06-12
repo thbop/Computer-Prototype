@@ -75,14 +75,14 @@ class CPU:
 
             if ins[0] == '0000': # ld
                 self.reg.write(
-                    ins[2],
-                    self.c.mem.read(ins[1])
+                    ins[3],
+                    self.c.mem.read(ins[1] + ins[2])
                 )
             elif ins[0] == '0001': # set
                 self.reg.write(ins[1], ins[2])
 
             elif ins[0] == '0010': # wrt
-                self.c.mem.write(ins[1], self.reg.read(ins[2]))
+                self.c.mem.write(ins[1] + ins[2], self.reg.read(ins[3]))
 
             
             elif ins[0] == '0011': # add

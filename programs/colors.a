@@ -1,11 +1,8 @@
 set A 1111
-set B 1111
 set H 0001
+dis A B A
 sub A H A
-sub B H B
-add A B C
-dis A B C
-biz 0000 0000 1001
-jmp 0000 0000 0011
-jmp 0000 0000 1001
+biz 0000 0000 0110
+jmp 0000 0000 0010
+jmp 0000 0000 0110
 end

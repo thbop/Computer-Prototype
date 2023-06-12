@@ -2,9 +2,9 @@
  A little computer prototype simulating basic hardware
 
 ## Cheatsheet
-* 0000 ld mem reg nul - loads data from memory into register via addresses
+* 0000 ld mem mem reg - loads data from memory into register via addresses
 * 0001 set reg val nul - sets reg data as a value
-* 0010 wrt mem reg nul - writes data to memory from registers via addresses
+* 0010 wrt mem mem reg - writes data to memory from registers via addresses
 
 * 0011 add reg reg reg - adds data in register A plus data in register B and stores the result in register C
 * 0100 sub reg reg reg - subtracts data in register A minus data in register B and stores the result in register C
